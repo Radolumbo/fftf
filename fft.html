@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>submit demo</title>
+	<style>
+		body {
+			background-color: grey;
+		}
+
+		p {
+			margin: 0;
+			color: blue;
+			margin-left: 10px;
+		}
+
+		.fontDiv {
+			float:left;
+		    background-image: url(font.png);
+		    /*background-position: -40px 0px;  Visible coordinates in image */
+		    height: 28px; /* Visible height */
+		    width: 20px; /* Visible width */
+		}
+
+		.fontDivRed {
+			float:left;
+		    background-image: url(font_red.png);
+		    /*background-position: -40px 0px;  Visible coordinates in image */
+		    height: 28px; /* Visible height */
+		    width: 20px; /* Visible width */
+		}
+
+		.bottom {
+			background-image: url(bottom.gif);
+			background-repeat: repeat-x;
+			height: 8px;
+			width: 330px;
+		}
+
+		.top {
+			background-image: url(top.gif);
+			background-repeat: repeat-x;
+			height: 6px;
+			width: 330px;
+		}
+
+		.portraittop {
+			background-image: url(top.gif);
+			background-repeat: repeat-x;
+			height: 6px;
+			width: 82px;
+		}
+
+		.portraitbottom {
+			background-image: url(bottom.gif);
+			background-repeat: repeat-x;
+			height: 6px;
+			width: 82px;
+		}
+
+		.entryArea {
+			clear:both;
+			margin-left: 10px;
+		}
+
+		.fontDisplay {
+			height: 110px;
+			width: 318px;
+			background-image: url("fftbg.gif");
+			vertical-align: top;
+		}
+
+		.fontLine {
+			height: 30px;
+			width: 318px;
+			background-image: url("fftbg.gif");
+			vertical-align: top;
+		}
+
+
+		.topleft {
+			background-image: url(topleft.gif);
+			background-repeat: no-repeat;
+		    width: 6px;
+		    height: 6px;
+		}
+
+		.left {
+			background-image: url(left.gif);
+			background-repeat: repeat-y;
+			width: 6px;
+			height: 117px;
+		}
+
+		.right {
+			background-image: url(right.gif);
+			background-repeat: repeat-y;
+			width: 8px;
+			height: 117px;
+		}
+
+		.bottomleft {
+			background-image: url(bottomleft.gif);
+			background-repeat: no-repeat;
+		    width: 6px;
+		    height: 8px;
+		}
+
+		.bottomright {
+			background-image: url(bottomright.gif);
+			background-repeat: no-repeat;
+		    width: 8px;
+		    height: 8px;
+		}
+
+		.topright {
+			background-image: url(topright.gif);
+			background-repeat: no-repeat;
+		    width: 6px;
+		    height: 6px;
+		}
+
+		.toprow {
+			height: 6px;
+		}
+
+		.portrait {
+			background-image: url("fftbg.gif");
+			text-align: center;
+			width: 82px;
+		}
+
+		table {
+			border-spacing: 0px;
+		}
+
+		td {
+			padding: 0px;
+		}
+
+		li {
+			list-style-type: none;
+		}
+
+	</style>
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+	<div class="dialogue">
+		<table>
+			<tbody>
+				<tr class="toprow"><td class="topleft"></td><td class="top" ><td class="portraittop"></td></td><td class="topright" ></td></tr>
+				<tr><td class="left"></td><td class="fontDisplay"><ul class="fontLines"></ul></td><td class="portrait"><img src="./rad.png" /></td><td class="right"></td></tr>
+				<tr><td class="bottomleft"></td><td class="bottom" ></td><td class="portraitbottom"></td><td class="bottomright"></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="entryArea">
+		<p>Type text to convert.</p>
+		<form action="javascript:alert( 'Invalid character detected!' );">
+			<div>
+				Name:<br>
+				<input type="text"><br>
+				Text:<br>
+				<input type="text"><br>
+				<input type="submit">
+			</div>
+		</form>
+	</div>
+
+	<script>
+	var codeMap = {
+		".": {x: -320, y: -112, width: 4},
+		",": {x: -1020, y: -1092, width: 4},
+		" ": {x: -1000, y: -1092, width: 6},
+		"'": {x: -740, y: -56, width: 6},
+		"\"": {x: -700, y: -56, width: 8},
+		"!": {x: -140, y: -28, width: 8},
+		"?": {x: -180, y: -28, width: 12},
+		"l": {width: 5},
+		"i": {width: 5},
+		"t": {width: 8},
+		"j": {x: -900},
+		"w": {width: 12},
+		"o": {width: 8},
+		"r": {width: 8},
+		"m": {width: 12},
+		"c": {width: 8},
+		"I": {width: 6}
+	}
+	</script>
+
+	<script>
+		$( "form" ).submit(function( event ) {
+
+			var stringTitle = $("input:eq(0)").val();
+			console.log(stringTitle);
+			var string = $("input:eq(1)").val();
+			$(".fontDisplay").empty();
+
+			$(".fontDisplay").append('<li class="fontLine"></li>');
+			$(".fontDisplay").append('<li class="fontLine"></li>');
+
+			//Sets initial space for both lines since I don't pick just one
+			$(".fontLine").append('<div class="fontDiv"></div>');
+			$(".fontLine div:last-child").css({"background-position": "-1000px -1092px"});
+			$(".fontLine div:last-child").css({"width": 6});
+
+
+
+			for(var i in stringTitle){
+				$(".fontLine:first").append('<div class="fontDivRed"></div>');
+				var char = stringTitle.charAt(i);
+				var x = 0;
+				var y = 0;
+				var width = 20;
+				
+				if(char >= '0' && char <= '9' ){
+					x = 0 - 20 * parseInt(char);
+					y = y;
+					width = 14;
+				}
+				else if(char >= 'A' && char <= 'Z' ){
+					x = -200 - 20 * (char.charCodeAt(0) - 'A'.charCodeAt(0));
+					y = 0;
+					width = 14;
+				}
+				else if(char >= 'a' && char <= 's' ){
+					x = -720 - 20 * (char.charCodeAt(0) - 'a'.charCodeAt(0));
+					y = 0;
+					width = 9;
+				}
+				else if(char >= 't' && char <= 'z' ){
+					x = 0 - 20 * (char.charCodeAt(0) - 't'.charCodeAt(0));
+					y = -28;
+					width = 9;
+				}
+
+				//Update any custom properties or any missing chars
+				if(codeMap.hasOwnProperty(char)){
+					if(codeMap[char].hasOwnProperty("x")){
+						x = codeMap[char].x;
+					}
+					if(codeMap[char].hasOwnProperty("y")){
+						y = codeMap[char].y;
+					}
+					if(codeMap[char].hasOwnProperty("width")){
+						width = codeMap[char].width;
+					}
+				}
+
+				$(".fontLine:first div:last-child").css({"background-position": x + "px " + y + "px"});
+				$(".fontLine:first div:last-child").css({"width": width});
+			}
+
+
+			for(var i in string){
+				$(".fontLine:last").append('<div class="fontDiv"></div>');
+				var char = string.charAt(i);
+				var x = 0;
+				var y = 0;
+				var width = 20;
+				
+				if(char >= '0' && char <= '9' ){
+					x = 0 - 20 * parseInt(char);
+					y = y;
+					width = 14;
+				}
+				else if(char >= 'A' && char <= 'Z' ){
+					x = -200 - 20 * (char.charCodeAt(0) - 'A'.charCodeAt(0));
+					y = 0;
+					width = 14;
+				}
+				else if(char >= 'a' && char <= 's' ){
+					x = -720 - 20 * (char.charCodeAt(0) - 'a'.charCodeAt(0));
+					y = 0;
+					width = 9;
+				}
+				else if(char >= 't' && char <= 'z' ){
+					x = 0 - 20 * (char.charCodeAt(0) - 't'.charCodeAt(0));
+					y = -28;
+					width = 9;
+				}
+
+				//Update any custom properties or any missing chars
+				if(codeMap.hasOwnProperty(char)){
+					if(codeMap[char].hasOwnProperty("x")){
+						x = codeMap[char].x;
+					}
+					if(codeMap[char].hasOwnProperty("y")){
+						y = codeMap[char].y;
+					}
+					if(codeMap[char].hasOwnProperty("width")){
+						width = codeMap[char].width;
+					}
+				}
+
+				$(".fontLine:last div:last-child").css({"background-position": x + "px " + y + "px"});
+				$(".fontLine:last div:last-child").css({"width": width});
+			}
+			event.preventDefault();
+		});
+	</script>
+
+</body>
+</html>
