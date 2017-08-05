@@ -161,7 +161,7 @@
 		<form action="javascript:alert( 'Invalid character detected!' );">
 			<div>
 				Name:<br>
-				<input type="text"><br>
+				<input type="text" id="nameBox" value="Agrias"><br>
 				Text:<br>
 				<textarea rows=5 cols=36 id="dialogueText"></textarea><br>
 				<input type="submit">
@@ -363,6 +363,11 @@
 	    function changePic(box){
 	    	var image = document.getElementById("portraitBox");
 		    image.src = box.value.toLowerCase() + ".png";
+		    var name = document.getElementById("nameBox");
+		    name.value = box.value.charAt(0).toUpperCase() + box.value.slice(1);
+		    if(name.value.indexOf("_") > 0){
+		    	name.value = name.value.substring(0, name.value.indexOf("_"));
+		    }
 	    }
 	</script>
 
