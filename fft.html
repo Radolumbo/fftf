@@ -145,10 +145,11 @@
 
 	</style>
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="./html2canvas.js"></script>
 </head>
 <body>
-	<div class="dialogue">
-		<table>
+	<div class="dialogue" style="width:426px;">
+		<table id="capturePoint">
 			<tbody>
 				<tr class="toprow"><td class="topleft"></td><td class="top" ><td class="portraittop"></td></td><td class="topright" ></td></tr>
 				<tr><td class="left"></td><td class="fontDisplay"></td><td class="portrait"><img src="./agrias.png" style="width: 62px; height: 96px;" id="portraitBox"/></td><td class="right"></td></tr>
@@ -157,17 +158,6 @@
 		</table>
 	</div>
 	<div class="entryArea">
-		<p>Type text to convert.</p>
-		<form action="javascript:alert( 'Invalid character detected!' );">
-			<div>
-				Name:<br>
-				<input type="text" id="nameBox" value="Agrias"><br>
-				Text:<br>
-				<textarea rows=5 cols=36 id="dialogueText"></textarea><br>
-				<input type="submit">
-			</div>
-		</form>
-
 		<p>Portrait:</p>
 		<input type="file" onchange="previewFile()"><br>
 		<br>
@@ -189,6 +179,20 @@
 			<option value="ramza_mercenary">Ramza (Mercenary)</option>
 			<option value="wiegraf">Wiegraf</option>
 		</select>
+		<br><br>
+		<p>Type text to convert.</p>
+		<form action="javascript:alert( 'Invalid character detected!' );">
+			<div>
+				Name:<br>
+				<input type="text" id="nameBox" value="Agrias"><br>
+				Text:<br>
+				<textarea rows=5 cols=36 id="dialogueText"></textarea><br>
+				<input type="submit">
+			</div>
+		</form>
+		<br>
+		<p>Image Render:</p>
+		<div id="dialogueImage"></div>
 
 	</div>
 	<br>
@@ -223,7 +227,7 @@
 	<script>
 		$( "form" ).submit(function( event ) {
 
-			var stringTitle = $("input:eq(0)").val();
+			var stringTitle = $("input:eq(1)").val();
 			var string = document.getElementById("dialogueText").value;
 			$(".fontDisplay").empty();
 
@@ -292,12 +296,26 @@
 				$(".fontLine:last div:last-child").css({"background-position": x + "px " + y + "px"});
 				$(".fontLine:last div:last-child").css({"width": width});
 			}
+			document.getElementById("dialogueImage").innerHTML = "";
+			var element = document.getElementsByClassName("dialogue")[0];
+			html2canvas(element, {
+			  onrendered: function(canvas) {
+			  	var context = canvas.getContext("2d");
+			  	var img = new Image();
+			  	img.onload = function(){
+			  		context.drawImage(img,344,14,62,96);
+			  	}
+			  	img.src = document.getElementById("portraitBox").src;
+			    document.getElementById("dialogueImage").appendChild(canvas);
+			  }
+			});
+
 			event.preventDefault();
 		});
 	</script>
 
 	<script>
-		function previewFile(){
+		 function previewFile(){
 	       var preview = document.querySelector('img'); //selects the query named img
 	       var file    = document.querySelector('input[type=file]').files[0]; //sames as here
 	       var reader  = new FileReader();
@@ -327,7 +345,7 @@
 	   }
 
 	   function updateTitle(stringTitle){
-			$(".fontDisplay").append('<li class="fontLine"></li>');
+	   	$(".fontDisplay").append('<li class="fontLine"></li>');
 
 	   	for(var i in stringTitle){
 	   		$(".fontLine:first").append('<div class="fontDivRed"></div>');
