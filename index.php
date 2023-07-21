@@ -1,1 +1,1 @@
-<?php header( 'Location: /fft.html' ) ;  ?>
+<?php header( 'Location: /index.html' ) ;  ?>
